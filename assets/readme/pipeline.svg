@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="540" viewBox="0 0 1200 540" role="img" aria-labelledby="title desc">
+  <title id="title">How an AgentFlow run moves</title>
+  <desc id="desc">A task and optional knowledge-base query enter the orchestrator. Planner writes a JSON plan, Executor runs tools in a ReAct loop, Reviewer returns pass, needs_revision, or fail, and the orchestrator maps that to completed, completed_with_revisions, or failed_review.</desc>
+
+  <defs>
+    <clipPath id="board">
+      <rect width="1200" height="540" rx="24"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#board)">
+    <rect width="1200" height="540" fill="#0B0D14"/>
+    <rect width="1200" height="3" fill="#6366F1"/>
+
+    <circle cx="72" cy="40" r="5" fill="#6366F1"/>
+    <text x="88" y="45" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="2.2" fill="#818CF8">ONE RUN</text>
+    <text x="56" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="700" fill="#E4E7EC">How a task moves</text>
+    <text x="56" y="118" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#9CA3AF">Orchestrator.process — the same three cards the playground shows.</text>
+
+    <!-- Intake strip -->
+    <g transform="translate(56 142)">
+      <rect width="1088" height="56" rx="10" fill="#161922" stroke="#2A2E3A"/>
+      <text x="20" y="35" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#E4E7EC">task</text>
+      <text x="78" y="35" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#3F4454">→</text>
+      <text x="108" y="35" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#818CF8">kb_query?</text>
+      <text x="232" y="35" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#6B7280">keyword search over documents, prepended to the planner prompt</text>
+    </g>
+
+    <!-- Planner column -->
+    <g transform="translate(56 220)">
+      <rect width="344" height="220" rx="12" fill="#161922" stroke="#2A2E3A"/>
+      <rect width="4" height="220" rx="2" fill="#6366F1"/>
+      <text x="22" y="36" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="1.6" fill="#818CF8">01  PLANNER</text>
+      <text x="22" y="66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">Planning —</text>
+      <text x="22" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">analyzing task…</text>
+      <text x="22" y="126" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#9CA3AF">Writes a JSON plan</text>
+      <text x="22" y="158" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#C7CAD1">goal</text>
+      <text x="22" y="184" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#C7CAD1">steps[].name · tool</text>
+      <text x="22" y="210" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#C7CAD1">estimated_complexity</text>
+    </g>
+
+    <path d="M412 330 l12 8 l-12 8" fill="none" stroke="#3F4454" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Executor column -->
+    <g transform="translate(428 220)">
+      <rect width="344" height="220" rx="12" fill="#161922" stroke="#2A2E3A"/>
+      <rect width="4" height="220" rx="2" fill="#22C55E"/>
+      <text x="22" y="36" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="1.6" fill="#4ADE80">02  EXECUTOR</text>
+      <text x="22" y="66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">Executing —</text>
+      <text x="22" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">carrying out plan…</text>
+      <text x="22" y="126" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#9CA3AF">ReAct loop, max 10 turns</text>
+      <text x="22" y="162" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#C7CAD1">calculator · search</text>
+      <text x="22" y="188" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#C7CAD1">read_file · write_file</text>
+      <text x="22" y="214" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#C7CAD1">web_fetch · json_parse</text>
+    </g>
+
+    <path d="M784 330 l12 8 l-12 8" fill="none" stroke="#3F4454" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Reviewer column -->
+    <g transform="translate(800 220)">
+      <rect width="344" height="220" rx="12" fill="#161922" stroke="#2A2E3A"/>
+      <rect width="4" height="220" rx="2" fill="#F59E0B"/>
+      <text x="22" y="36" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="1.6" fill="#FBBF24">03  REVIEWER</text>
+      <text x="22" y="66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">Reviewing output…</text>
+      <text x="22" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#9CA3AF">JSON verdict, score 1–10</text>
+      <text x="22" y="138" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#4ADE80">pass → final_output</text>
+      <text x="22" y="168" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#FBBF24">needs_revision → revise</text>
+      <text x="22" y="198" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#F87171">fail → failed_review</text>
+    </g>
+
+    <!-- Status mapping -->
+    <g transform="translate(56 462)">
+      <rect width="1088" height="52" rx="10" fill="#161922" stroke="#2A2E3A"/>
+      <text x="20" y="33" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#6B7280">status</text>
+      <text x="110" y="33" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#4ADE80">completed</text>
+      <text x="248" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#3F4454">·</text>
+      <text x="268" y="33" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#FBBF24">completed_with_revisions</text>
+      <text x="548" y="33" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#3F4454">·</text>
+      <text x="568" y="33" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#F87171">failed_review</text>
+    </g>
+  </g>
+</svg>

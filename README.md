@@ -1,33 +1,28 @@
-# AgentFlow — Enterprise Multi-Agent Collaboration Platform
+<p align="center">
+  <img src="./assets/readme/hero.svg" width="100%" alt="AgentFlow: submit a task and three agents handle it — Planner writes a JSON plan, Executor runs six tools, Reviewer returns pass, revise, or fail.">
+</p>
 
-A production-ready enterprise platform for orchestrating multiple AI agents in a **Plan → Execute → Review** pipeline.
+Submit a task. Three agents handle it in order:
 
-## Architecture
+1. **Planner** writes a JSON plan: `goal`, 3–7 `steps` (name, action, optional tool), `estimated_complexity`.
+2. **Executor** carries the plan out with six tools in a ReAct loop (max 10 turns).
+3. **Reviewer** returns `pass`, `needs_revision`, or `fail`, with a 1–10 score and an optional `revised_output`.
 
-```
-User Request
-     │
-     ▼
-┌──────────┐    ┌───────────┐    ┌──────────┐
-│ Planner  │───▶│ Executor  │───▶│ Reviewer │
-│ (规划)   │    │ (执行)    │    │ (审查)   │
-└──────────┘    └───────────┘    └──────────┘
-     │               │                │
-     ▼               ▼                ▼
-  Task Plan     Tool Calls       Quality Report
-  (JSON)        (6 tools)        (Pass/Revise)
-```
+The React playground shows those three artifacts as cards. If you pass `kb_query`, stored documents are keyword-searched and prepended to the planner prompt.
 
-## Features
+<p align="center">
+  <img src="./assets/readme/pipeline.svg" width="100%" alt="One run: task and optional kb_query enter the orchestrator; Planner writes JSON, Executor runs tools, Reviewer maps pass / needs_revision / fail to completed, completed_with_revisions, or failed_review.">
+</p>
 
-- **Multi-Agent Pipeline**: Planner → Executor → Reviewer with automatic orchestration
-- **Built-in Tools**: Calculator, Search, File R/W, Web Fetch, JSON Parse
-- **Knowledge Base**: Document store for RAG-powered context injection
-- **REST API**: FastAPI backend with async support and streaming
-- **Web UI**: React dashboard with task playground and knowledge management
-- **Persistent Storage**: SQLite with SQLAlchemy async ORM
+## What is in the box
 
-## Quick Start
+- **Orchestrator** — `Plan → Execute → Review` in `backend/app/agents/orchestrator.py`
+- **Tools** — `calculator`, `search`, `read_file`, `write_file`, `web_fetch`, `json_parse`
+- **API** — FastAPI on `:8000`, including streaming chat
+- **UI** — React dashboard: Agents, Playground, Knowledge (`:3000`, Vite proxies `/api`)
+- **Store** — SQLite (SQLAlchemy async) for tasks; knowledge documents in `knowledge_base.json`
+
+## Run it
 
 ### Backend
 
@@ -35,14 +30,15 @@ User Request
 cd backend
 pip install -r requirements.txt
 
-# Set your OpenAI API key
 export OPENAI_API_KEY=sk-your-key
-export OPENAI_BASE_URL=https://api.openai.com/v1  # or custom endpoint
+# optional
+export OPENAI_BASE_URL=https://api.openai.com/v1
+export AGENTFLOW_LLM_MODEL=gpt-4o-mini
 
 python run.py
-# Server starts at http://localhost:8000
-# API docs at http://localhost:8000/docs
 ```
+
+Server: [http://localhost:8000](http://localhost:8000) · OpenAPI: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ### Frontend
 
@@ -50,56 +46,38 @@ python run.py
 cd frontend
 npm install
 npm run dev
-# Opens at http://localhost:3000
 ```
 
-### Environment Variables
+Opens [http://localhost:3000](http://localhost:3000). Go to **Playground**, describe a task, optionally add a knowledge-base query, then **Execute Pipeline**.
 
-| Variable | Default | Description |
+| Variable | Default | Role |
 |---|---|---|
-| `OPENAI_API_KEY` | — | Your OpenAI API key |
-| `OPENAI_BASE_URL` | `https://api.openai.com/v1` | API base URL (supports compatible providers) |
-| `AGENTFLOW_LLM_MODEL` | `gpt-4o-mini` | Model to use |
+| `OPENAI_API_KEY` | — | API key (required) |
+| `OPENAI_BASE_URL` | `https://api.openai.com/v1` | Any OpenAI-compatible endpoint |
+| `AGENTFLOW_LLM_MODEL` | `gpt-4o-mini` | Model name (`AGENTFLOW_` prefix) |
 
-## API Endpoints
+## Limits
 
-| Method | Path | Description |
+These are how the repo actually behaves:
+
+- **`search` is simulated.** It returns placeholder JSON. Wire a real search API before relying on it.
+- **Knowledge base is keyword search**, not embeddings. `KnowledgeBase.search` scores term counts over a JSON file.
+- **File tools are unsandboxed.** `read_file` / `write_file` use the local filesystem.
+- **Direct chat** (`POST /api/agents/chat`) skips the pipeline and talks to the Executor only.
+
+## API
+
+| Method | Path | What it does |
 |---|---|---|
-| `GET` | `/api/agents/` | List available agents |
-| `POST` | `/api/agents/run` | Execute pipeline task |
-| `POST` | `/api/agents/chat` | Direct chat with agent |
-| `GET` | `/api/agents/tools` | List available tools |
-| `GET` | `/api/tasks/` | List task history |
-| `POST` | `/api/tasks/` | Create task record |
-| `GET` | `/api/knowledge/` | List knowledge docs |
-| `POST` | `/api/knowledge/` | Add knowledge doc |
-| `POST` | `/api/knowledge/search` | Search knowledge base |
-
-## Project Structure
-
-```
-agentflow/
-├── backend/
-│   ├── app/
-│   │   ├── agents/        # Planner, Executor, Reviewer, Orchestrator
-│   │   ├── core/           # LLM client, Memory, Tools, Knowledge
-│   │   ├── api/            # FastAPI route handlers
-│   │   ├── models/         # SQLAlchemy models
-│   │   ├── services/       # Business logic
-│   │   ├── config.py       # Settings
-│   │   └── main.py         # FastAPI app
-│   ├── requirements.txt
-│   └── run.py
-├── frontend/
-│   ├── src/
-│   │   ├── pages/          # Agents, Playground, Knowledge
-│   │   ├── services/       # API client
-│   │   ├── App.tsx
-│   │   └── main.tsx
-│   ├── package.json
-│   └── vite.config.ts
-└── README.md
-```
+| `GET` | `/api/agents/` | List Planner, Executor, Reviewer |
+| `POST` | `/api/agents/run` | Run the pipeline (`task`, optional `kb_query`) |
+| `POST` | `/api/agents/chat` | Direct Executor chat (`stream` supported) |
+| `GET` | `/api/agents/tools` | List tool specs |
+| `GET` | `/api/tasks/` | Task history |
+| `POST` | `/api/tasks/` | Create a task record |
+| `GET` | `/api/knowledge/` | List documents |
+| `POST` | `/api/knowledge/` | Add a document |
+| `POST` | `/api/knowledge/search` | Keyword search |
 
 ## License
 

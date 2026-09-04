@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc">
+  <title id="title">AgentFlow</title>
+  <desc id="desc">Submit a task and three agents handle it in order: Planner writes a JSON plan, Executor runs six tools, Reviewer returns pass, needs_revision, or fail.</desc>
+
+  <defs>
+    <clipPath id="board">
+      <rect width="1200" height="400" rx="24"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#board)">
+    <rect width="1200" height="400" fill="#0B0D14"/>
+    <rect width="1200" height="3" fill="#6366F1"/>
+
+    <!-- Brand row -->
+    <circle cx="72" cy="42" r="5" fill="#6366F1"/>
+    <text x="88" y="47" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="2.4" fill="#818CF8">MULTI-AGENT PIPELINE</text>
+    <text x="1128" y="47" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#6B7280">v1.0.0</text>
+
+    <!-- Name + promise -->
+    <text x="56" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="56" font-weight="700" fill="#E4E7EC">AgentFlow</text>
+
+    <text x="56" y="158" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="600" fill="#818CF8">Plan</text>
+    <text x="128" y="158" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="500" fill="#3F4454">→</text>
+    <text x="162" y="158" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="600" fill="#4ADE80">Execute</text>
+    <text x="280" y="158" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="500" fill="#3F4454">→</text>
+    <text x="314" y="158" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="600" fill="#FBBF24">Review</text>
+
+    <text x="56" y="196" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" fill="#9CA3AF">Submit a task. You get a JSON plan, tool-backed work, and a verdict.</text>
+    <text x="56" y="222" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#6B7280">POST /api/agents/run</text>
+    <text x="268" y="222" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#3F4454">·</text>
+    <text x="286" y="222" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#6B7280">playground · knowledge · gpt-4o-mini</text>
+
+    <!-- Station 01 Planner -->
+    <g transform="translate(56 250)">
+      <rect width="344" height="118" rx="12" fill="#161922" stroke="#2A2E3A"/>
+      <rect width="4" height="118" rx="2" fill="#6366F1"/>
+      <text x="22" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="1.5" fill="#818CF8">01  PLANNER</text>
+      <text x="248" y="28" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#6B7280">规划</text>
+      <text x="22" y="60" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">JSON plan, 3–7 steps</text>
+      <text x="22" y="90" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#9CA3AF">goal · steps[] · complexity</text>
+    </g>
+
+    <path d="M412 309 l12 8 l-12 8" fill="none" stroke="#3F4454" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Station 02 Executor -->
+    <g transform="translate(428 250)">
+      <rect width="344" height="118" rx="12" fill="#161922" stroke="#2A2E3A"/>
+      <rect width="4" height="118" rx="2" fill="#22C55E"/>
+      <text x="22" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="1.5" fill="#4ADE80">02  EXECUTOR</text>
+      <text x="248" y="28" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#6B7280">执行</text>
+      <text x="22" y="60" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">Six tools, ReAct loop</text>
+      <text x="22" y="90" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#9CA3AF">calc · files · fetch · json</text>
+    </g>
+
+    <path d="M784 309 l12 8 l-12 8" fill="none" stroke="#3F4454" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Station 03 Reviewer -->
+    <g transform="translate(800 250)">
+      <rect width="344" height="118" rx="12" fill="#161922" stroke="#2A2E3A"/>
+      <rect width="4" height="118" rx="2" fill="#F59E0B"/>
+      <text x="22" y="28" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="600" letter-spacing="1.5" fill="#FBBF24">03  REVIEWER</text>
+      <text x="248" y="28" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#6B7280">审查</text>
+      <text x="22" y="60" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="600" fill="#E4E7EC">Score, then a verdict</text>
+      <text x="22" y="90" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#9CA3AF">pass · revise · fail</text>
+    </g>
+  </g>
+</svg>
